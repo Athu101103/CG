@@ -1,0 +1,40 @@
+import turtle
+import cv2
+import numpy as np
+
+# Set up the screen
+screen = turtle.Screen()
+screen.setup(width=600, height=600)
+screen.tracer(0)  # Turn off animation
+
+# Create a turtle object
+pen = turtle.Turtle()
+
+# Your drawing code here
+pen.penup()
+pen.goto(-100, 100)
+pen.pendown()
+pen.circle(100)
+
+# Update the screen
+screen.update()
+
+# Save the drawing as an image using OpenCV
+def save_drawing():
+    # Capture the drawing window as an image
+    screen.update()
+    screen_img = screen.getcanvas().postscript(colormode='color')
+    img = np.array(cv2.imread(screen_img.split()[0], cv2.IMREAD_COLOR))
+    
+    # Convert RGB to BGR
+    img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+    
+    # Save the image
+    cv2.imwrite("turtle_drawing.png", img)
+
+# Bind save function to a key
+screen.onkey(save_drawing, "s")
+
+# Listen for events
+screen.listen()
+screen.mainloop()
